@@ -43,7 +43,7 @@ module.exports = {
         3. Copy YourNgrokAuthToken: https://dashboard.ngrok.com/get-started/your-authtoken
     */
     ngrokAuthToken: '',
-    apiKeySecret: 'mirotalksfu_default_secret',
+    apiKeySecret: 'p9CoLhvrAbSSyFRouJTC',
     sentry: {
         /*
         Sentry
