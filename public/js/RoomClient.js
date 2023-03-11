@@ -1670,7 +1670,55 @@ class RoomClient {
         return elem;
     }
 
-    
+    removeConsumer(consumer_id, consumer_kind) {
+        console.log('Remove consumer', { consumer_id: consumer_id, consumer_kind: consumer_kind });
+
+        let elem = this.getId(consumer_id);
+        if (elem) {
+            elem.srcObject.getTracks().forEach(function (track) {
+                track.stop();
+            });
+            elem.parentNode.removeChild(elem);
+        }
+
+        if (consumer_kind === 'video') {
+            let d = this.getId(consumer_id + '__video');
+            if (d) {
+                d.parentNode.removeChild(d);
+                //alert(this.pinnedVideoPlayerId + '==' + consumer_id);
+                if (this.isVideoPinned && this.pinnedVideoPlayerId == consumer_id) {
+                    this.removeVideoPinMediaContainer();
+                    console.log('Remove pin container due the Consumer close', {
+                        consumer_id: consumer_id,
+                        consumer_kind: consumer_kind,
+                    });
+                }
+            }
+
+            handleAspectRatio();
+            console.log(
+                '[removeConsumer - ' + consumer_kind + '] Video-element-count',
+                this.videoMediaContainer.childElementCount,
+            );
+        }
+
+        if (consumer_kind === 'audio') {
+            let audioConsumerPlayerId = this.getMapKeyByValue(this.audioConsumers, consumer_id);
+            if (audioConsumerPlayerId) {
+                let inputPv = this.getId(audioConsumerPlayerId);
+                if (inputPv) inputPv.style.display = 'none';
+                this.audioConsumers.delete(audioConsumerPlayerId);
+                console.log('Remove audio Consumer', {
+                    consumer_id: consumer_id,
+                    audioConsumerPlayerId: audioConsumerPlayerId,
+                    audioConsumers: this.audioConsumers,
+                });
+            }
+        }
+
+        this.consumers.delete(consumer_id);
+        this.sound('left');
+    }
 
     // ####################################################
     // HANDLE VIDEO OFF
