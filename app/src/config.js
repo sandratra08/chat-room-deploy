@@ -128,7 +128,7 @@ module.exports = {
         webRtcTransport: {
             listenIps: [
                 {
-                    ip: '0.0.0.0',
+                    ip: getLocalIp(),
                     announcedIp: getLocalIp(), // replace by public static IPV4 address https://api.ipify.org
                 }, //announcedIp: '' will be auto-detected on server start, for docker localPC set '127.0.0.1'
             ],
